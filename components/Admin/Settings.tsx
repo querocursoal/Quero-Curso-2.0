@@ -69,7 +69,17 @@ const Settings: React.FC = () => {
         setSaved(false);
       } catch (error: any) {
         console.error("Upload error:", error);
-        alert(`Erro ao enviar imagem: ${error.message || 'Erro desconhecido'}. Tente uma imagem menor ou outro formato.`);
+        let errorMsg = 'Erro desconhecido';
+        if (error.message?.includes('not found')) {
+          errorMsg = 'Bucket "site-assets" não encontrado. Verifique o Supabase Storage.';
+        } else if (error.message?.includes('permission')) {
+          errorMsg = 'Sem permissão. Verifique as políticas RLS do bucket.';
+        } else if (error.message?.includes('size')) {
+          errorMsg = 'Arquivo muito grande. Tente uma imagem menor.';
+        } else {
+          errorMsg = error.message || error.error_description || 'Erro ao fazer upload';
+        }
+        alert(`Erro ao enviar banner:\n${errorMsg}`);
       } finally {
         setIsLoadingLocal(false);
       }
@@ -99,7 +109,15 @@ const Settings: React.FC = () => {
         setSaved(false);
       } catch (error: any) {
         console.error("Logo upload error:", error);
-        alert(`Erro na logo: ${error.message}`);
+        let errorMsg = 'Erro desconhecido';
+        if (error.message?.includes('not found')) {
+          errorMsg = 'Bucket "site-assets" não encontrado. Verifique o Supabase Storage.';
+        } else if (error.message?.includes('permission')) {
+          errorMsg = 'Sem permissão para fazer upload. Verifique as políticas RLS do bucket.';
+        } else {
+          errorMsg = error.message || error.error_description || 'Erro ao fazer upload';
+        }
+        alert(`Erro ao enviar logo do cabeçalho:\n${errorMsg}`);
       } finally {
         setIsLoadingLocal(false);
       }
@@ -129,7 +147,15 @@ const Settings: React.FC = () => {
         setSaved(false);
       } catch (error: any) {
         console.error("Footer logo upload error:", error);
-        alert(`Erro na logo do rodapé: ${error.message}`);
+        let errorMsg = 'Erro desconhecido';
+        if (error.message?.includes('not found')) {
+          errorMsg = 'Bucket "site-assets" não encontrado. Verifique o Supabase Storage.';
+        } else if (error.message?.includes('permission')) {
+          errorMsg = 'Sem permissão para fazer upload. Verifique as políticas RLS do bucket.';
+        } else {
+          errorMsg = error.message || error.error_description || 'Erro ao fazer upload';
+        }
+        alert(`Erro ao enviar logo do rodapé:\n${errorMsg}`);
       } finally {
         setIsLoadingLocal(false);
       }
