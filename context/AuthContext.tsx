@@ -25,13 +25,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isAdmin, setIsAdmin] = useState(false);
   const [profile, setProfile] = useState<{ full_name?: string; avatar_url?: string } | null>(null);
 
-  const fetchUserRole = async (userId: string) => {
+  const fetchUserRole = async (userId: string, userEmail?: string) => {
     try {
-      // Get user email to check admin access
-      const { data: { user: currentUser } } = await supabase.auth.getUser();
-
       // Check if user is admin by email
-      const isAdminUser = currentUser?.email === 'querocurso.al@gmail.com';
+      const isAdminUser = userEmail === 'querocurso.al@gmail.com';
       setIsAdmin(isAdminUser);
 
       // Fetch student profile for name and avatar
@@ -52,7 +49,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setUser(session?.user ?? null);
       if (session?.user) {
-        await fetchUserRole(session.user.id);
+        await fetchUserRole(session.user.id, session.user.email);
       } else {
         setIsAdmin(false);
         setProfile(null);
@@ -65,7 +62,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const { data: { session } } = await supabase.auth.getSession();
       setUser(session?.user ?? null);
       if (session?.user) {
-        await fetchUserRole(session.user.id);
+        await fetchUserRole(session.user.id, session.user.email);
       }
       setLoading(false);
     };
