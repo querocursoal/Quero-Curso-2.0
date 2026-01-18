@@ -1,0 +1,2 @@
+-- This file was found to be corrupted and has been cleared.
+-- Please restore your Supabase Row Level Security policies here if needed.

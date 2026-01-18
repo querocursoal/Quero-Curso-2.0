@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quero Curso - Capacitação Profissional</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://esm.sh/react-image-crop/dist/ReactCrop.css" />
+  <style>
+    /* Custom scrollbar for a more modern look */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #333fa4;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #252e77;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Text Shadow Utilities */
+    .text-shadow-lg {
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .text-shadow-md {
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Course Carousel Styles */
+    .course-carousel-container {
+      position: relative;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .course-carousel {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      padding: 1.5rem 0;
+      scrollbar-width: none;
+      cursor: grab;
+    }
+
+    .course-carousel:active {
+      cursor: grabbing;
+    }
+
+    .course-carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    .carousel-item {
+      flex: 0 0 85%;
+      scroll-snap-align: center;
+      margin: 0 0.75rem;
+      max-width: 380px;
+    }
+
+    @media (min-width: 768px) {
+
+      /* Tablet */
+      .carousel-item {
+        flex-basis: 45%;
+        max-width: 400px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+
+      /* Desktop */
+      .carousel-item {
+        flex-basis: 28%;
+        max-width: 420px;
+      }
+    }
+
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background-color: rgba(255, 255, 255, 0.8);
+      color: #333fa4;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #ddd;
+      cursor: pointer;
+      transition: opacity 0.3s, transform 0.3s, background-color 0.3s;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      opacity: 1;
+      /* Visible on touch devices */
+    }
+
+    .carousel-arrow:hover {
+      transform: translateY(-50%) scale(1.1);
+      background-color: white;
+    }
+
+    .carousel-arrow:disabled {
+      opacity: 0 !important;
+      cursor: not-allowed;
+      transform: translateY(-50%) scale(0.9);
+    }
+
+    .left-arrow {
+      left: 0.5rem;
+    }
+
+    .right-arrow {
+      right: 0.5rem;
+    }
+
+    /* Hide arrows on desktop, show on container hover */
+    @media (min-width: 1024px) {
+      .carousel-arrow {
+        opacity: 0;
+      }
+
+      .left-arrow {
+        left: -24px;
+      }
+
+      .right-arrow {
+        right: -24px;
+      }
+
+      .course-carousel-container:hover .carousel-arrow {
+        opacity: 1;
+      }
+    }
+
+    /* Carousel Dots */
+    .carousel-dots {
+      text-align: center;
+      padding-top: 1rem;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #d1d5db;
+      /* gray-300 */
+      margin: 0 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .dot:hover {
+      background-color: #9ca3af;
+      /* gray-400 */
+    }
+
+    .dot.active {
+      background-color: #333fa4;
+      transform: scale(1.25);
+    }
+
+    /* Image Crop Modal Styles */
+    .crop-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .crop-modal-content {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 0.5rem;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ReactCrop__image {
+      max-height: 60vh;
+    }
+  </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.12.0",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@^2.90.1",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "react-image-crop": "https://esm.sh/react-image-crop@^11.0.10"
+  }
+}
+</script>
+  <link rel="stylesheet" href="/index.css">
+</head>
+
+<body class="bg-white">
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+
+</html>
