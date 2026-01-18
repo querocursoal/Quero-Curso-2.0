@@ -30,13 +30,9 @@ const Header: React.FC = () => {
       e.preventDefault();
       e.stopPropagation();
     }
-    try {
-      setUserMenuOpen(false);
-      await logout();
-      navigate('/');
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
+    setUserMenuOpen(false);
+    await logout();
+    // AuthContext now handles navigation and cleanup
   };
 
   return (

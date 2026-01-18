@@ -93,12 +93,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const logout = async () => {
     try {
       await supabase.auth.signOut();
+      // Clear all cached data
+      sessionStorage.clear();
+      localStorage.removeItem('supabase.auth.token');
     } catch (error) {
       console.error("Error signing out:", error);
     } finally {
       setUser(null);
       setIsAdmin(false);
       setProfile(null);
+      // Force page reload to ensure clean state
+      window.location.href = '/';
     }
   };
 

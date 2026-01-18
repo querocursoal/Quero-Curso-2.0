@@ -63,13 +63,13 @@ const LoginPage: React.FC = () => {
             <h1 className="text-3xl md:text-4xl font-black text-[#002366] leading-tight mb-2 uppercase tracking-tighter">
               {COMPANY_NAME}
             </h1>
-            <p className="text-gray-400 font-bold text-sm tracking-wide">ÁREA DO ALUNO</p>
+            <p className="text-gray-400 font-bold text-sm tracking-wide">ACESSO RESTRITO</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label htmlFor="email" className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">
-                Seu E-mail de Aluno
+                Seu E-mail
               </label>
               <div className="relative group">
                 <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400 group-focus-within:text-blue-600 transition-colors">
@@ -132,7 +132,7 @@ const LoginPage: React.FC = () => {
                 className="w-full py-5 rounded-2xl shadow-xl shadow-blue-200 hover:shadow-400 transform hover:-translate-y-1 transition-all duration-300 text-sm font-black tracking-widest flex items-center justify-center gap-2 uppercase bg-[#0072ff] text-white"
                 disabled={loading}
               >
-                {loading ? 'Validando...' : 'Entrar na Área do Aluno'}
+                {loading ? 'Validando...' : 'Entrar'}
               </Button>
             </div>
           </form>
