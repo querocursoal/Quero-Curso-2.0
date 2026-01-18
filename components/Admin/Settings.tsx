@@ -170,11 +170,16 @@ const Settings: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    saveSettings(formState);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+    const result = await saveSettings(formState);
+
+    if (result.success) {
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    } else {
+      alert(`Erro ao salvar configurações: ${result.error}\n\nVerifique sua conexão e tente novamente.`);
+    }
   };
 
   if (loading) {

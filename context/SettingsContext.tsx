@@ -17,7 +17,7 @@ interface Settings {
 
 interface SettingsContextType {
   settings: Settings;
-  saveSettings: (newSettings: Settings) => Promise<void>;
+  saveSettings: (newSettings: Settings) => Promise<{ success: boolean; error?: string }>;
   loading: boolean;
 }
 
@@ -87,26 +87,36 @@ export const SettingsProvider: React.FC<{ children: ReactNode }> = ({ children }
     fetchSettings();
   }, []);
 
-  const saveSettings = async (newSettings: Settings) => {
-    // Map Frontend (camelCase) to Database (lowercase)
-    const dbData = {
-      id: 1,
-      whatsappnumber: newSettings.whatsappNumber,
-      lowstockthreshold: newSettings.lowStockThreshold,
-      heroslides: newSettings.heroSlides,
-      instagramurl: newSettings.instagramUrl,
-      facebookurl: newSettings.facebookUrl,
-      linkedinurl: newSettings.linkedinUrl,
-      sitelogourl: newSettings.siteLogoUrl,
-      footerlogourl: newSettings.footerLogoUrl,
-      updated_at: new Date().toISOString()
-    };
+  const saveSettings = async (newSettings: Settings): Promise<{ success: boolean; error?: string }> => {
+    try {
+      // Map Frontend (camelCase) to Database (lowercase)
+      const dbData = {
+        id: 1,
+        whatsappnumber: newSettings.whatsappNumber,
+        lowstockthreshold: newSettings.lowStockThreshold,
+        heroslides: newSettings.heroSlides,
+        instagramurl: newSettings.instagramUrl,
+        facebookurl: newSettings.facebookUrl,
+        linkedinurl: newSettings.linkedinUrl,
+        sitelogourl: newSettings.siteLogoUrl,
+        footerlogourl: newSettings.footerLogoUrl,
+        updated_at: new Date().toISOString()
+      };
 
-    const { error } = await supabase.from('settings').upsert(dbData);
-    if (error) {
-      console.error("Error saving settings:", error.message);
-    } else {
-      setSettings(newSettings);
+      const { error } = await supabase.from('settings').upsert(dbData);
+
+      if (error) {
+        console.error("Error saving settings:", error.message);
+        return { success: false, error: error.message };
+      } else {
+        setSettings(newSettings);
+        // Update cache after successful save
+        sessionStorage.setItem('site_settings', JSON.stringify(newSettings));
+        return { success: true };
+      }
+    } catch (err: any) {
+      console.error("Unexpected error saving settings:", err);
+      return { success: false, error: err.message || 'Erro desconhecido' };
     }
   };
 
