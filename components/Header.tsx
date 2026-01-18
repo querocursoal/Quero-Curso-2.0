@@ -25,10 +25,18 @@ const Header: React.FC = () => {
     fontWeight: 'bold',
   };
 
-  const handleLogout = async () => {
-    await logout();
-    setUserMenuOpen(false);
-    navigate('/');
+  const handleLogout = async (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    try {
+      setUserMenuOpen(false);
+      await logout();
+      navigate('/');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
   };
 
   return (
@@ -76,7 +84,8 @@ const Header: React.FC = () => {
                     Meu Painel
                   </button>
                   <button
-                    onClick={handleLogout}
+                    type="button"
+                    onClick={(e) => handleLogout(e)}
                     className="w-full px-4 py-2 text-left hover:bg-gray-50 flex items-center gap-2 text-red-600"
                   >
                     <LogOut size={16} />
@@ -137,7 +146,8 @@ const Header: React.FC = () => {
                   Meu Painel
                 </button>
                 <button
-                  onClick={() => { handleLogout(); setIsOpen(false); }}
+                  type="button"
+                  onClick={(e) => { handleLogout(e); setIsOpen(false); }}
                   className="text-red-600 text-lg font-semibold hover:text-red-700 transition-colors duration-300 flex items-center gap-2"
                 >
                   <LogOut size={18} />
