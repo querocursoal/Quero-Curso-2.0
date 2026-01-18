@@ -29,14 +29,10 @@ const LoginPage: React.FC = () => {
       setLoading(false);
     } else {
       if (data?.user) {
-        // Check if user is admin
-        const { data: adminData } = await supabase
-          .from('admin_users')
-          .select('id')
-          .eq('id', data.user.id)
-          .single();
+        // Check if user is admin by email
+        const isAdmin = data.user.email === 'querocurso.al@gmail.com';
 
-        if (adminData) {
+        if (isAdmin) {
           navigate('/admin', { replace: true });
         } else {
           navigate('/student-dashboard', { replace: true });

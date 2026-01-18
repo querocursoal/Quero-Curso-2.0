@@ -27,14 +27,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const fetchUserRole = async (userId: string) => {
     try {
-      // Check if user is admin
-      const { data: adminData } = await supabase
-        .from('admin_users')
-        .select('id')
-        .eq('id', userId)
-        .maybeSingle();
+      // Get user email to check admin access
+      const { data: { user: currentUser } } = await supabase.auth.getUser();
 
-      setIsAdmin(!!adminData);
+      // Check if user is admin by email
+      const isAdminUser = currentUser?.email === 'querocurso.al@gmail.com';
+      setIsAdmin(isAdminUser);
 
       // Fetch student profile for name and avatar
       const { data: profileData } = await supabase
